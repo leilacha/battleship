@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
-require 'pry'
 require_relative 'case'
 
 # class for Board
 class Board
+  attr_reader :columns, :rows
+  attr_accessor :cases
+
   def initialize(columns:, rows:)
     @columns = columns
     @rows = rows
@@ -36,7 +38,9 @@ class Board
 
     selected_cases = coordinates.map do |coordinate|
       fetch_case(coordinate: coordinate)
-    end
+    end.compact
+
+    return false if selected_cases.empty?
     return false unless selected_cases.all?(&:empty?)
 
     selected_cases
@@ -54,6 +58,14 @@ class Board
       fetch_case(coordinate: coordinate)
     end
     selected_cases.each { |c| c.hidden = false }
+  end
+
+  def check_coordinate(coordinate:)
+    CoordinateChecker.new(
+      coordinate: coordinate,
+      board_rows: @rows,
+      board_columns: @columns
+    ).check
   end
 
   private

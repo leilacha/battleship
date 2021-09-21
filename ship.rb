@@ -2,29 +2,27 @@
 
 # class for Ship
 class Ship
-  attr_accessor :pawn, :hits
-  attr_reader :coordinates
+  attr_reader :size
+  attr_accessor :coordinates
 
   def initialize(size:)
-    @pawn = pawn
     @size = size
     @coordinates = []
-    @hits = 0
   end
 
   def choose_coordinates
     @coordinates = []
-    puts "Please choose #{@size} following coordinates to place your ship. ex A1, B4, C3"
+    puts "Please choose #{@size} following coordinates to place your ship. ex A1, B1, C1"
     puts 'Press enter after each coordinates'
     until @coordinates.size == @size
       input = gets.chomp
       @coordinates << input
-      @coordinates.compact!
+      @coordinates.compact.uniq!
     end
   end
 
   def aligned?
-    return if @coordinates.empty?
+    return false if @coordinates.empty?
 
     horizontal = @coordinates.map { |c| c.split('').first.ord }.uniq.sort
     vertical = @coordinates.map { |c| c.split('').last.to_i }.uniq.sort

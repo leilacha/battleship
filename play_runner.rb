@@ -1,23 +1,25 @@
 # frozen_string_literal: true
 
-require 'pry'
-
 # Play a turn
 class PlayRunner
-  def initialize(player:, ships:)
-    @player = player
+  def initialize(player_name:, ships:, board:)
+    @player_name = player_name
     @ships = ships
     @selected_coordinate = nil
+    @board = board
   end
 
   def run
-    puts "Hey #{@player.name}, it\'s your turn"
+    puts "Hey #{@player_name}, it\'s your turn"
     puts 'Please choose a coordinate where to hit (ex A1, B4, C3) and press enter'
-    @selected_coordinate = gets.chomp
+    until @board.check_coordinate(coordinate: @selected_coordinate)
+      input = gets.chomp
+      @selected_coordinate = input
+    end
     ship_hit = hit_or_miss
     if ship_hit
-      puts 'HIT !!' if ship_hit.coordinates.any?
-      puts 'SINK !!' if ship_hit.coordinates.empty?
+      puts 'HIT !!' unless ship_hit.sank?
+      puts 'SINK !!' if ship_hit.sank?
     else
       puts 'MISS !!'
     end

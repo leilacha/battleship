@@ -20,8 +20,9 @@ class Case
   end
 
   def displayed_pawn(player_pawn:)
-    no_display = @pawn != player_pawn && @hidden
-    return 'o' if @pawn.nil? || no_display
+    hide_to_player = @pawn && pawn != player_pawn && @hidden
+    return 'o' if hide_to_player
+    return 'o' if @pawn.nil? && @hidden
     return 'x' if @pawn.nil? && !@hidden
 
     @pawn
